@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA. 
  *
- * $Id: //eng/vdo-releases/aluminum/src/c++/vdo/base/recoveryJournalBlock.h#5 $
+ * $Id: //eng/vdo-releases/aluminum/src/c++/vdo/base/recoveryJournalBlock.h#7 $
  */
 
 #ifndef RECOVERY_JOURNAL_BLOCK_H
@@ -114,18 +114,21 @@ static inline bool isRecoveryBlockEmpty(const RecoveryJournalBlock *block)
 __attribute__((warn_unused_result))
 static inline bool isRecoveryBlockFull(const RecoveryJournalBlock *block)
 {
-  return (block->journal->entriesPerBlock == block->entryCount);
+  return ((block == NULL)
+	  || (block->journal->entriesPerBlock == block->entryCount));
 }
 
 /**
  * Construct a journal block.
  *
+ * @param [in]  layer     The layer from which to construct VIOs
  * @param [in]  journal   The journal to which the block will belong
  * @param [out] blockPtr  A pointer to receive the new block
  *
  * @return VDO_SUCCESS or an error
  **/
-int makeRecoveryBlock(RecoveryJournal       *journal,
+int makeRecoveryBlock(PhysicalLayer         *layer,
+                      RecoveryJournal       *journal,
                       RecoveryJournalBlock **blockPtr)
   __attribute__((warn_unused_result));
 
